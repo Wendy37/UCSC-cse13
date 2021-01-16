@@ -1,6 +1,6 @@
 # Assignment 1
 
-This program automatically runs the game called "Garlic Game." The user needs to enter the number of players and ramdom seed number. This program will ends if one player wins.
+This program automatically runs the game called "Garlic Game." The user needs to enter the number of players and a ramdom seed number. This program will end if one player wins.
 
 ## Build
 
