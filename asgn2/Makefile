@@ -1,5 +1,5 @@
 CC = clang
-CFLAGS = -Wall -Werror -Wextra -Wpedantic
+CFLAGS = -Wall -Wextra -Werror -Wpedantic
 
 all: mathlib-test
 
