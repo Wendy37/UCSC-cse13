@@ -73,11 +73,13 @@ int ncurses(Universe *A, Universe *B, int generation){
     return 0;
 }
 
-/*int ncurses_s(Universe *A, Universe *B, int generation){
-    new_gen(A, B);
-    swap_pointer(&A, &B);
+int ncurses_s(Universe *A, Universe *B, int generation){
+    for(int i = 0; i < generation; i++){
+        new_gen(A, B);
+        swap_pointer(&A, &B);
+    }
     return 0;
-}*/
+}
 
 int main(int argc, char **argv) {
     int opt = 0;
@@ -119,34 +121,29 @@ int main(int argc, char **argv) {
             default: fprintf(stderr, "Usage: %s -[tsnio]\n", argv[0]);
         }
     }
-    printf("Toroidal: %d\n", toroidal);
-    printf("Silence: %d\n", silence);
-    printf("Generation: %d\n", generation);
     get_rc(infile, &rows, &cols);
     
     Universe *A = uv_create(rows, cols, toroidal);
     Universe *B = uv_create(rows, cols, toroidal);
-    
-    printf("rows is: %d\n", uv_rows(A));
-    printf("toroidal is: %d\n", uv_toroidal(A));
 
     initialize(A);
     initialize(B);
-    printf("toroidal is: %d\n", uv_toroidal(A));
 
     if(uv_populate(A, infile)==false){
         fprintf(stderr, "Failed to populate the universe.\n");
         exit(1);
     }
-    printf("toroidal is: %d\n", uv_toroidal(A));
 
-    printf("check: %d\n", uv_get_cell(A, 9, 9));
-    printf("toroidal is: %d\n", uv_toroidal(A));
-
-    printf("9, 9: %d\n", uv_census(A, 9, 9));
+    if(silence == true){
+        ncurses_s(A, B, generation);
+    }
+    else if(silence == false){
+        ncurses(A, B, generation);
+    }
+    
     uv_print(A, outfile);
-    //ncurses(A, B, generation);
-    //uv_print(A, outfile2);
+    uv_delete(A);
+    uv_delete(B);
     
     return 0;
 }

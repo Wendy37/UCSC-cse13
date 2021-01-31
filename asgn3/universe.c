@@ -19,7 +19,7 @@ Universe *uv_create(int rows, int cols, bool toroidal){
     for(int i = 0; i < rows; i++){
         u -> grid[i] = (bool *)calloc(cols, sizeof(bool));
     }
-    printf("inside create, toroidal: %d\n", toroidal);
+    //printf("inside create, toroidal: %d\n", toroidal);
     return u;
 }
 
@@ -29,10 +29,6 @@ int uv_rows(Universe *u){
 
 int uv_cols(Universe *u){
     return u->cols;
-}
-
-bool uv_toroidal(Universe *u){
-    return u->toroidal;
 }
 
 void uv_delete(Universe *u){
@@ -125,7 +121,6 @@ int uv_census(Universe *u, int r, int c){
     bool **grid = u->grid;
     printf("toroidal is: %d\n", u->toroidal);
     if (u->toroidal == false){  // flat universe
-        printf("inside flat\n");
         for (int i = c-1; i < c+2; i++){
             if ( uv_inbound(u, r-1, i) && grid[r-1][i]){
                 live++;
@@ -145,7 +140,6 @@ int uv_census(Universe *u, int r, int c){
         }
     }
     else{  // toroidal universe
-        printf("inside toroidal\n");
         for (int i = c-1; i < c+2; i++){
             if ( uv_inbound(u, r-1, i) && grid[r-1][i]){
                 live++;

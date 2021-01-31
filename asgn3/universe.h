@@ -26,7 +26,4 @@ int uv_census(Universe *u, int r, int c);
 
 void uv_print(Universe *u, FILE *outfile);
 
-bool uv_inbound(Universe *u, int r, int c); //
-
-bool uv_toroidal(Universe *u);
 #endif
