@@ -1,8 +1,8 @@
 #ifndef __UNIVERSE_H__
 #define __UNIVERSE_H__
 
-#include <stdio.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 typedef struct Universe Universe;
 
