@@ -12,7 +12,7 @@
 #define OPTIONS "tsn:i:o:"
 
 int get_rc(FILE *infile, int *rows, int *cols){
-    fscanf(infile, "%d %d\n", rows, cols);
+    fscanf(infile, "%d %d", rows, cols);
     return 0;
 }
 
@@ -110,7 +110,7 @@ int main(int argc, char **argv) {
                 
                 if (infile == NULL || errno == EINVAL){
                     fprintf(stderr, "%s is an invalid file.\n", optarg);
-                    //exit(1);
+                    exit(1);
                 }
                 break;
             case 'o':
