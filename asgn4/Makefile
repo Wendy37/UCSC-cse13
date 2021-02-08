@@ -3,7 +3,8 @@ CFLAGS = -Wall -Wextra -Werror -Wpedantic
 
 all: gen dec err 
 
-format: clang-format -i -style=file bm.c decoder.c generator.c error.c hamming.c
+format: bm.c decoder.c generator.c error.c hamming.c
+	clang-format -i -style=file bm.c decoder.c generator.c error.c hamming.c
 
 gen: gen.o hamming.o bm.o
 	$(CC) -o gen gen.o bm.o hamming.o -lm
