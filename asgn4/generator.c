@@ -52,27 +52,16 @@ int main(int argc, char **argv){
     uint8_t *highcode = &high; // code
     
     while(!feof(infile)){
-        //printf("inside while\n");
         int byte = fgetc(infile);
-        //printf("byte = %d\n", byte);
         highdata = upper_nibble(byte);
         lowdata = lower_nibble(byte);
-        //printf("highdata = %d\n", highdata);
-        //printf("lowdata = %d\n", lowdata);
 
         ham_encode(highdata, highcode);
         ham_encode(lowdata, lowcode);
-        
-       // printf("highcode = %d\n", high);
-        //printf("lowcode = %d\n", low);
 
         fputc(low, outfile);
-        //printf("finish putting low\n");
         fputc(high, outfile);
-        //printf("finish putting high\n");
-
     }
-    printf("outside while\n");
     fclose(infile);
     fclose(outfile);
     

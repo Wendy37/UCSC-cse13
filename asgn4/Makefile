@@ -1,12 +1,12 @@
 CC = clang
 CFLAGS = -Wall -Wextra -Werror -Wpedantic
 
-all: generator decoder err
+all: gen dec err
 
-generator: generator.o hamming.o bm.o
-	$(CC) -o generator generator.o bm.o hamming.o -lm
+gen: gen.o hamming.o bm.o
+	$(CC) -o gen generator.o bm.o hamming.o -lm
 
-generator.o: generator.c
+gen.o: generator.c
 	$(CC) $(CFLAGS) -c generator.c
 
 hamming.o: hamming.c
@@ -15,10 +15,10 @@ hamming.o: hamming.c
 bm.o: bm.c
 	$(CC) $(CFLAGS) -c bm.c
 	
-decoder: decoder.o hamming.o bm.o
-	$(CC) -o decoder decoder.o bm.o hamming.o -lm
+dec: dec.o hamming.o bm.o
+	$(CC) -o dec decoder.o bm.o hamming.o -lm
 
-decoder.o: decoder.c
+dec.o: decoder.c
 	$(CC) $(CFLAGS) -c decoder.c
 	
 err: error.o
@@ -27,5 +27,5 @@ error.o: error.c
 	$(CC) $(CFLAGS) -c error.c
 	
 clean:
-	rm -f generator err decoder *.o
+	rm -f gen err dec *.o
 

@@ -111,9 +111,6 @@ ham_rc ham_encode(uint8_t data, uint8_t *code){
     else{
         return HAM_OK;
     }
-    
-    //bm_print(code_v);
-    //printf("code = %d\n", *code);
 }
 
 
@@ -123,12 +120,9 @@ ham_rc ham_decode(uint8_t code, uint8_t *data){
     BitMatrix *error_v = bm_create(1, 4);
 
     int_to_mat(code, code_v);
-    //bm_print(code_v); ///////////////////////
     mat_mult(error_v, code_v, parity);     // error = code_v * parity
-    //bm_print(error_v);////////////////////
     
     uint8_t error = mat_to_int(error_v);   // find error that can be corrected
-    //printf("error = %d\n", error);
     if(code_v == NULL | data == NULL | error_v==NULL){
         return HAM_ERR;
     }
@@ -139,7 +133,6 @@ ham_rc ham_decode(uint8_t code, uint8_t *data){
         return HAM_OK;
     }
     
-    //printf("index = %d\n", index);///////////////
     if (index != -1){                     // correct the error in code_v
         if(bm_get_bit(code_v, 0, index) == 0){
             bm_set_bit(code_v, 0, index);
@@ -152,8 +145,4 @@ ham_rc ham_decode(uint8_t code, uint8_t *data){
     } else{
         return HAM_ERR;
     }
-    
-    /*bm_print(code_v);///////////////////
-    bm_print(data_v);///////////////
-    printf("data = %d\n", *data);//////////////*/
 }
