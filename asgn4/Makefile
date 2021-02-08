@@ -29,3 +29,5 @@ error.o: error.c
 clean:
 	rm -f gen err dec *.o
 
+format:
+	clang-format -i --style=file *.[ch]
