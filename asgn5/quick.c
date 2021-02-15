@@ -18,8 +18,11 @@ uint64_t partition(uint32_t *A, int64_t lo, int64_t hi, globe *g_q){
             j -= 1;
 
         }
-        if(count(g_q) && comparison(i, j)){
+        if(i<j){
             swap(A, i, j);
+            moves(g_q);
+            moves(g_q);
+            moves(g_q);
         }
     }
     return j;
@@ -27,26 +30,32 @@ uint64_t partition(uint32_t *A, int64_t lo, int64_t hi, globe *g_q){
 
 
 void quick_sort(uint32_t *A, uint32_t n){
+    globe *g_q = g_create(1, 0);
     uint32_t left = 0;
     uint32_t right = n-1;
     int64_t hi = 0;
     int64_t lo = 0;
-    globe *g_q = g_create(1, 0);
     Stack *stack = stack_create();
     stack_push(stack, left);
     stack_push(stack, right);
     while (!stack_empty(stack)){
-        stack_pop(stack, &hi);//////////////
+        stack_pop(stack, &hi);
         stack_pop(stack, &lo);
         int64_t p = partition(A, lo, hi, g_q);
-        if( count(g_q) && comparison(p+1, hi)){
+        if(comparison(p+1, hi)){
             stack_push(stack, (p + 1));
             stack_push(stack, hi);
         }
-        if(count(g_q) && comparison(lo, p)){
+        if(comparison(lo, p)){
             stack_push(stack, lo);
             stack_push(stack, p);
         }
     }
+    delete_g(g_q);
     printf("Quick Sort\n");
-    printf("%d elements, %d compares\n", n, count(g_q)-1);}
+    printf("%d elements, %d moves, %d compares\n", n, moves(g_q)-1, count(g_q)-1);
+}
+
+
+
+

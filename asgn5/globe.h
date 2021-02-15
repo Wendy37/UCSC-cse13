@@ -13,8 +13,12 @@ void swap(uint32_t *A, int64_t a, int64_t b);
 
 bool comparison(int64_t a, int64_t b);
 
+uint32_t moves(globe *g);
+
 void print_array(uint32_t *A, uint32_t n);
 
 uint32_t count(globe *g);
+
+void delete_g(globe *g);
 
 #endif /* globe_h */
