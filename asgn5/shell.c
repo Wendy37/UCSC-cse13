@@ -9,13 +9,12 @@ void shell_sort(uint32_t *A, uint32_t n){
     while(gaps[index] >= n){
         index++;
     }
-    uint32_t comp = 0;
     for (uint32_t k = index; k < 102; k++){
         uint32_t gap = gaps[k];
         for(uint32_t i = gap; i < n; i++){
             uint32_t j = i;
             uint32_t temp = A[i];
-            while(j >= gap && comparison(temp, A[j-gap], &comp)){
+            while(j >= gap && comparison(temp, A[j-gap])){
                 swap(A, j, j-gap);
                 j -= gap;
             }
