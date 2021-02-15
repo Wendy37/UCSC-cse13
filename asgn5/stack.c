@@ -51,11 +51,14 @@ bool stack_pop(Stack *s, int64_t *x){
 void stack_print(Stack *s){
     printf("stack is: \n");
     for(int64_t i = 0; i < s->capacity; i++){
-        printf("%ld ", s->items[i]);
+        printf("%lld ", s->items[i]);
     }
     printf("\n");
     printf("%d\n", s->top);
 }
+
+
+
 
 
 

@@ -19,16 +19,17 @@ typedef enum Sorts{     // index
     heap = 3
 } Sorts;
 
-uint32_t rand_number(void){
-    uint32_t r = rand();
-    r &= ~(1 << 30);
-    return r;
+void fill_array(uint32_t *A, uint32_t size, uint32_t seed){
+    srand(seed);
+    for (uint32_t i = 0; i < size; i++){
+        A[i] = rand() & ~(1 << 30);
+    }
 }
 
 int main(int argc, char **argv){
     int opt = 0;
     Set s = set_empty();
-    uint32_t random = 7092016;
+    uint32_t seed = 7092016;
     char temp[100];
     uint32_t size = 100;
     uint32_t print_elem = 100;
@@ -54,7 +55,7 @@ int main(int argc, char **argv){
                 break;
             case 'r':
                 strcpy(temp, optarg);
-                sscanf(temp, "%d", &random);
+                sscanf(temp, "%d", &seed);
                 break;
             case 'n':
                 strcpy(temp, optarg);
@@ -68,31 +69,29 @@ int main(int argc, char **argv){
                 break;
         }
     }
-    srand(random);
-    uint32_t A[size];
+    uint32_t *A = malloc(size * sizeof(uint32_t));
     if (print_elem > size){ print_elem = size; }
     
-    for (uint32_t i = 0; i < size; i++){
-        A[i] = rand_number();
-    }
-    
     if(set_member(s, bubble)){
+        fill_array(A, size, seed);
         bubble_sort(A, size);
         print_array(A, print_elem);
     }
     if(set_member(s, shell)){
+        fill_array(A, size, seed);
         shell_sort(A, size);
         print_array(A, print_elem);
     }
     if(set_member(s, quick)){
+        fill_array(A, size, seed);
         quick_sort(A, size);
         print_array(A, print_elem);
     }
     if(set_member(s, heap)){
+        fill_array(A, size, seed);
         heap_sort(A, size);
         print_array(A, print_elem);
     }
-    
     
     return 0;
 }
