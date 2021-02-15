@@ -3,8 +3,8 @@ CFLAGS = -Wall -Wextra -Werror -Wpedantic
 
 all: sorting
 
-sorting: bubble.o shell.o quick.o heap.o sorting.o globe.o set.o stack.o
-	$(CC) -o sorting bubble.o shell.o quick.o heap.o sorting.o globe.o set.o stack.o -lm
+sorting: sorting.o bubble.o shell.o quick.o heap.o globe.o set.o stack.o
+	$(CC) -o sorting sorting.o bubble.o shell.o quick.o heap.o globe.o set.o stack.o -lm
 
 bubble.o: bubble.c
 	$(CC) $(CFLAGS) -c bubble.c

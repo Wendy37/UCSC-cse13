@@ -35,22 +35,24 @@ int main(int argc, char **argv){
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt){
             case 'a':
-                set_insert(s, bubble);
-                set_insert(s, shell);
-                set_insert(s, quick);
-                set_insert(s, heap);
+                s = set_insert(s, bubble);
+                s = set_insert(s, shell);
+                s = set_insert(s, quick);
+                s = set_insert(s, heap);
                 break;
             case 'b':
-                set_insert(s, bubble);
+                printf("set b\n");
+                s = set_insert(s, bubble);
+                
                 break;
             case 's':
-                set_insert(s, shell);
+                s = set_insert(s, shell);
                 break;
             case 'q':
-                set_insert(s, quick);
+                s = set_insert(s, quick);
                 break;
             case 'h':
-                set_insert(s, heap);
+                s = set_insert(s, heap);
                 break;
             case 'r':
                 strcpy(temp, optarg);
@@ -65,6 +67,7 @@ int main(int argc, char **argv){
                 sscanf(temp, "%d", &print_elem);
                 break;
             default: fprintf(stderr, "Usage: %s -[absqhr:n:p:]\n", argv[0]);
+                break;
         }
     }
     srand(random);
@@ -74,8 +77,10 @@ int main(int argc, char **argv){
     for (uint32_t i = 0; i < size; i++){
         A[i] = rand_number();
     }
+    printf("s = %d\n", s);
     
     if(set_member(s, bubble)){
+        printf("inside b\n");
         bubble_sort(A, size);
         print_array(A, print_elem);
     } else if(set_member(s, shell)){

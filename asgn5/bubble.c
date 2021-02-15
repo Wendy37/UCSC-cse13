@@ -4,6 +4,7 @@
 #include "globe.h"
 
 void bubble_sort(uint32_t *A, uint32_t n){  // A is array, n is length/elements of the array
+    uint32_t size = n;
     bool swapped = true;
     while(swapped){
         swapped = false;
@@ -16,5 +17,5 @@ void bubble_sort(uint32_t *A, uint32_t n){  // A is array, n is length/elements 
         n -= 1;
     }
     printf("Bubble Sort\n");
-    printf("%d elements, %d compares\n", n, count()-2);
+    printf("%d elements, %d compares\n", size, count()-2);
 }
