@@ -1,8 +1,21 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include <inttypes.h>
 #include "globe.h"
+
+struct globe {
+    uint32_t comp;
+    uint32_t moves;
+};
+
+globe *g_create(uint32_t comp, uint32_t moves){
+    globe *g = (globe *)calloc(1, sizeof(globe));
+    g->comp = comp;
+    g->moves = moves;
+    return g;
+}
 
 void swap(uint32_t *A, int64_t a, int64_t b){
     uint32_t temp = A[a];
@@ -10,10 +23,14 @@ void swap(uint32_t *A, int64_t a, int64_t b){
     A[b] = temp;
 }
 
-uint32_t count(void){
-    static uint32_t c = 1;
-    c++;
-    return c;
+uint32_t count(globe *g){
+    g->comp++;
+    return g->comp;
+}
+
+uint32_t moves(globe *g){
+    g->moves++;
+    return g->moves;
 }
 
 bool comparison(int64_t a, int64_t b){

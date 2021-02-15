@@ -42,7 +42,6 @@ int main(int argc, char **argv){
                 break;
             case 'b':
                 s = set_insert(s, bubble);
-                
                 break;
             case 's':
                 s = set_insert(s, shell);
@@ -69,9 +68,7 @@ int main(int argc, char **argv){
                 break;
         }
     }
-    printf("s = %d\n", s);
     srand(random);
-    
     uint32_t A[size];
     if (print_elem > size){ print_elem = size; }
     
@@ -80,16 +77,18 @@ int main(int argc, char **argv){
     }
     
     if(set_member(s, bubble)){
-
         bubble_sort(A, size);
         print_array(A, print_elem);
-    } if(set_member(s, shell)){
+    }
+    if(set_member(s, shell)){
         shell_sort(A, size);
         print_array(A, print_elem);
-    } if(set_member(s, quick)){
+    }
+    if(set_member(s, quick)){
         quick_sort(A, size);
         print_array(A, print_elem);
-    } if(set_member(s, heap)){
+    }
+    if(set_member(s, heap)){
         heap_sort(A, size);
         print_array(A, print_elem);
     }

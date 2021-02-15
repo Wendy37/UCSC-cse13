@@ -5,12 +5,16 @@
 
 #include <stdio.h>
 
+typedef struct globe globe;
+
+globe *g_create(uint32_t comp, uint32_t moves);
+
 void swap(uint32_t *A, int64_t a, int64_t b);
 
 bool comparison(int64_t a, int64_t b);
 
 void print_array(uint32_t *A, uint32_t n);
 
-uint32_t count(void);
+uint32_t count(globe *g);
 
 #endif /* globe_h */
