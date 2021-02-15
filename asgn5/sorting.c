@@ -35,24 +35,23 @@ int main(int argc, char **argv){
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt){
             case 'a':
-                s = set_insert(s, bubble);
-                s = set_insert(s, shell);
-                s = set_insert(s, quick);
-                s = set_insert(s, heap);
+                s += set_insert(s, bubble);
+                s += set_insert(s, shell);
+                s += set_insert(s, quick);
+                s += set_insert(s, heap);
                 break;
             case 'b':
-                printf("set b\n");
-                s = set_insert(s, bubble);
+                s += set_insert(s, bubble);
                 
                 break;
             case 's':
-                s = set_insert(s, shell);
+                s += set_insert(s, shell);
                 break;
             case 'q':
-                s = set_insert(s, quick);
+                s += set_insert(s, quick);
                 break;
             case 'h':
-                s = set_insert(s, heap);
+                s += set_insert(s, heap);
                 break;
             case 'r':
                 strcpy(temp, optarg);
@@ -77,10 +76,8 @@ int main(int argc, char **argv){
     for (uint32_t i = 0; i < size; i++){
         A[i] = rand_number();
     }
-    printf("s = %d\n", s);
     
     if(set_member(s, bubble)){
-        printf("inside b\n");
         bubble_sort(A, size);
         print_array(A, print_elem);
     } else if(set_member(s, shell)){
