@@ -8,7 +8,7 @@ typedef uint32_t Set;
 
 Set set_empty(void);
 
-bool set_member(Set s, uint8_t x); //check whether there's a member
+bool set_member(Set s, uint8_t x); // check whether there's a member
 
 Set set_insert(Set s, uint8_t x);
 
