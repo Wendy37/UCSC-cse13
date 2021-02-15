@@ -31,26 +31,25 @@ void quick_sort(uint32_t *A, uint32_t n){
     uint32_t right = n-1;
     int64_t hi = 0;
     int64_t lo = 0;
-    //uint32_t comp = 0;
+    uint32_t reset;
     
     Stack *stack = stack_create();
     stack_push(stack, left);
     stack_push(stack, right);
     while (!stack_empty(stack)){
-        printf("quick while\n");
-        stack_pop(stack, &hi);//////////////
+        stack_pop(stack, &hi);
         stack_pop(stack, &lo);
         int64_t p = partition(A, lo, hi);
-        printf("part next\n");
-        if( count() && comparison(p+1, hi)){
+        if( comparison(p+1, hi)){
             stack_push(stack, (p + 1));
             stack_push(stack, hi);
         }
-        printf("first if\n");
-        if(count() && comparison(lo, p)){
+        if( comparison(lo, p)){
             stack_push(stack, lo);
             stack_push(stack, p);
         }
     }
     printf("Quick Sort\n");
-    printf("%d elements, %d compares\n", n, count()-2);}
+    printf("%d elements, %d compares\n", n, count()-2);
+    reset = count()-count();
+   }

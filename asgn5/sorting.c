@@ -35,23 +35,23 @@ int main(int argc, char **argv){
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt){
             case 'a':
-                s += set_insert(s, bubble);
-                s += set_insert(s, shell);
-                s += set_insert(s, quick);
-                s += set_insert(s, heap);
+                s = set_insert(s, bubble);
+                s = set_insert(s, shell);
+                s = set_insert(s, quick);
+                s = set_insert(s, heap);
                 break;
             case 'b':
-                s += set_insert(s, bubble);
+                s = set_insert(s, bubble);
                 
                 break;
             case 's':
-                s += set_insert(s, shell);
+                s = set_insert(s, shell);
                 break;
             case 'q':
-                s += set_insert(s, quick);
+                s = set_insert(s, quick);
                 break;
             case 'h':
-                s += set_insert(s, heap);
+                s = set_insert(s, heap);
                 break;
             case 'r':
                 strcpy(temp, optarg);
@@ -69,7 +69,9 @@ int main(int argc, char **argv){
                 break;
         }
     }
+    printf("s = %d\n", s);
     srand(random);
+    
     uint32_t A[size];
     if (print_elem > size){ print_elem = size; }
     
@@ -78,15 +80,16 @@ int main(int argc, char **argv){
     }
     
     if(set_member(s, bubble)){
+
         bubble_sort(A, size);
         print_array(A, print_elem);
-    } else if(set_member(s, shell)){
+    } if(set_member(s, shell)){
         shell_sort(A, size);
         print_array(A, print_elem);
-    } else if(set_member(s, quick)){
+    } if(set_member(s, quick)){
         quick_sort(A, size);
         print_array(A, print_elem);
-    } else if(set_member(s, heap)){
+    } if(set_member(s, heap)){
         heap_sort(A, size);
         print_array(A, print_elem);
     }

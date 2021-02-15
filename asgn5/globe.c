@@ -4,8 +4,6 @@
 #include <inttypes.h>
 #include "globe.h"
 
-uint32_t A[11] = {15768739, 246783, 37833, 4234, 597036, 63274839, 726738, 8234, 0, 1, 7};
-
 void swap(uint32_t *A, int64_t a, int64_t b){
     uint32_t temp = A[a];
     A[a] = A[b];
