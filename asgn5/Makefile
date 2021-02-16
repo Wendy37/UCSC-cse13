@@ -33,3 +33,5 @@ heap.o: heap.c
 clean:
 	rm -f sorting *.o
 
+format:
+	clang-format -i --style=file *.[ch]

@@ -1,10 +1,7 @@
 #ifndef globe_h
 #define globe_h
-#include <stdint.h>
 #include <stdbool.h>
-#include <stdio.h>
-
-
+#include <stdint.h>
 #include <stdio.h>
 
 typedef struct globe globe;
