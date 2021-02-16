@@ -18,6 +18,6 @@ uint32_t count(globe *g);
 
 uint32_t moves(globe *g);
 
-void delete_g(globe **g);
+void delete_g(globe *g);
 
 #endif
