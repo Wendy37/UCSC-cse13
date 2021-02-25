@@ -19,5 +19,4 @@ bool bf_probe(BloomFilter *bf, char *oldspeak);
 
 void bf_print(BloomFilter *bf);
 
-void test_prim(BloomFilter *bf);///////////
 #endif

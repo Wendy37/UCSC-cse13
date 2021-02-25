@@ -1,47 +1,40 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <unistd.h>
+#include <stdlib.h>
 #include "hash.h"
 #include "banhammer.h"
 #include "parser.h"
 #include "bf.h"
-#include "bv.h"
+#include "hash.h"
+#include "node.h"
+#include "ll.h"
 
 // test!!!!!
 int main(){
-    FILE *infile = fopen("test.txt", "r");
-    BloomFilter *bf = bf_create(40);
-    test_prim(bf);
-    char oldspeak;
-    while (!feof(infile)){
-        test_prim(bf);
-        fscanf(infile, "%s\n", &oldspeak); // ok
-        test_prim(bf);
-        bf_insert(bf, &oldspeak); // err
-    }
-    printf("Bloom Filter test:\n");
-    bf_print(bf);
-    bf_delete(&bf);
-    fclose(infile);
-    return 0;
-    /*BloomFilter *bf = bf_create(10);
-    printf("1");
+    //BloomFilter *bf = bf_create(10);
     HashTable *ht = ht_create(10, false);
-    printf("2");
     FILE *infile = fopen("test.txt", "r");
-    printf("3");
-    //FILE *outfile = stdout;
-    char oldspeak;
-    while (!feof(infile)){
-        printf("4");
-        fscanf(infile, "%s\n", &oldspeak);
-        bf_insert(bf, &oldspeak);
-        ht_insert(ht, &oldspeak, NULL);
-    }
+    /*char badspeak1[50];
+    char badspeak2[50];
+    fscanf(infile, "%s\n", badspeak1);
+    ht_insert(ht, badspeak1, NULL);
+    fscanf(infile, "%s\n", badspeak2);
+    ht_insert(ht, badspeak2, NULL);
     
-    printf("Bloom Filter test:\n");
-    bf_print(bf);
-    printf("Hash Table test:\n");
+    ht_print(ht);*/
+    char badspeak[1024];
+    while( !feof(infile)){
+        fscanf(infile, "%s\n", badspeak);
+        printf("badspeak: %s\n", badspeak);
+        ht_insert(ht, badspeak, NULL);
+    }
     ht_print(ht);
-    return 0;*/
+    //HashTable *ht = ht_create(10, false);
+    /*ht_insert(ht, "wendi", "good");
+    ht_insert(ht, "ghjk", "alsk");
+    ht_insert(ht, "ghjk", NULL);
+    ht_print(ht);*/
+    
+    return 0;
 }

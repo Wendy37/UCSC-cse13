@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "ll.h"
 #include "speck.h"
+#include "node.h"
 
 struct HashTable {
     uint64_t salt [2];
@@ -13,7 +14,7 @@ struct HashTable {
 };
 
 HashTable *ht_create(uint32_t size, bool mtf) {
-    HashTable *ht = (HashTable *) malloc(sizeof(HashTable));
+    HashTable *ht = (HashTable *)malloc(sizeof(HashTable));
     if (ht) {
         ht->salt[0] = 0x85ae998311115ae3; // Il nome della rosa
         ht->salt[1] = 0xb6fac2ae33a40089;
@@ -45,21 +46,31 @@ uint32_t ht_size(HashTable *ht){
 
 Node *ht_lookup(HashTable *ht, char *oldspeak){
     uint32_t index = hash(ht->salt, oldspeak) % ht_size(ht);
-    Node *n = ll_lookup(ht->lists[index], oldspeak);
+    struct Node *n = ll_lookup(ht->lists[index], oldspeak);
+    //node_print(n);
     return n;
 }
 
 void ht_insert(HashTable *ht, char *oldspeak, char *newspeak){
     uint32_t index = hash(ht->salt, oldspeak) % ht_size(ht);
-    if( ht->lists[index] == NULL){
-        ll_create(ht->mtf);
+    if( !ht->lists[index]){
+        ht->lists[index] = ll_create(ht->mtf);
     }
     ll_insert(ht->lists[index], oldspeak, newspeak);
 }
 
 void ht_print(HashTable *ht){
     for(uint32_t i = 0; i < ht->size; i++){
-        ll_print(ht->lists[i]);
-        printf("\n");
+        if(!ht->lists[i]){
+            printf("no ll in lists[%d]\n", i);
+        }
+        else{
+            printf("lists[%d]: \n", i);
+            ll_print(ht->lists[i]);
+        }
     }
+}
+
+void get_ll(HashTable *ht, uint32_t index){  // print a specific ll
+    ll_print(ht->lists[index]);
 }

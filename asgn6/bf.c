@@ -22,17 +22,16 @@ BloomFilter *bf_create(uint32_t size){
         bf->tertiary [0] = 0xd37b01df0ae8f8d0;
         bf->tertiary [1] = 0x911d454886ca7cf7;
         bf->filter = bv_create(size);
-        printf("bv size: %d\n", bv_length(bf->filter));
         if(!bf->filter){
             free(bf);
             bf = NULL;
-            printf("bv not generated\n");
         }
     }
     return bf;
 }
 
 void bf_delete(BloomFilter **bf){
+    bv_delete(&((*bf)->filter));
     free((*bf)->filter);
     free(*bf);
     *bf = NULL;
@@ -42,20 +41,15 @@ uint32_t bf_length(BloomFilter *bf){
     return bv_length(bf->filter);
 }
 
-void test_prim(BloomFilter *bf){
-    printf("%llu\n", bf->primary[1]);
-}
+void bf_insert(BloomFilter *bf, char *oldspeak){
+    uint32_t index1 = (hash(bf->primary, oldspeak) % bf_length(bf)) + 1;
+    //printf("index1 = %d\n", index1);
+    uint32_t index2 = (hash(bf->secondary, oldspeak) % bf_length(bf)) + 1;
+    //printf("index2 = %d\n", index2);
+    uint32_t index3 = (hash(bf->tertiary, oldspeak) % bf_length(bf)) + 1;
+    //printf("index3 = %d\n", index3);
 
-void bf_insert(BloomFilter *bf, char *oldspeak){ // err
-    printf("inside bf_insert\n");
-    printf("%llu\n", bf->primary[1]); // err
-    uint32_t index1 = hash(bf->primary, oldspeak) % bf_length(bf);
-    printf("index1 = %d\n", index1);
-    uint32_t index2 = hash(bf->secondary, oldspeak) % bf_length(bf);
-    uint32_t index3 = hash(bf->tertiary, oldspeak) % bf_length(bf);
-    
     bv_set_bit(bf->filter, index1);
-    printf("hash done\n");
     bv_set_bit(bf->filter, index2);
     bv_set_bit(bf->filter, index3);
 }
@@ -64,14 +58,12 @@ bool bf_probe(BloomFilter *bf, char *oldspeak){
     uint32_t index1 = hash(bf->primary, oldspeak) % bf_length(bf);
     uint32_t index2 = hash(bf->secondary, oldspeak) % bf_length(bf);
     uint32_t index3 = hash(bf->tertiary, oldspeak) % bf_length(bf);
-    if(bv_get_bit(bf->filter, index1) & bv_get_bit(bf->filter, index2) & bv_get_bit(bf->filter, index3)){
+    if(bv_get_bit(bf->filter, index1) && bv_get_bit(bf->filter, index2) && bv_get_bit(bf->filter, index3)){
         return true;
     }
     return false;
 }
 
 void bf_print(BloomFilter *bf){
-    for (uint32_t i = 0; i < bf_length(bf); i++) {
-        printf("%d ", bv_get_bit(bf->filter, i));
-    }
+    bv_print(bf->filter);
 }
