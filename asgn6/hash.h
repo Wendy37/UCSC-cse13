@@ -19,6 +19,4 @@ void ht_insert(HashTable *ht, char *oldspeak, char *newspeak);
 
 void ht_print(HashTable *ht);
 
-void get_ll(HashTable *ht, uint32_t index);
-
 #endif

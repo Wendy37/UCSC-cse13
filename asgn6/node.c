@@ -28,10 +28,11 @@ void node_delete(Node **n){
 }
 
 void node_print(Node *n){
-    if(n->oldspeak != NULL && n->newspeak != NULL){
+    if(n == NULL){
+        printf("the node is NULL\n");
+    } else if(n->oldspeak != NULL && n->newspeak != NULL){
         printf("%s -> %s\n", n->oldspeak, n->newspeak);
-    }
-    else if(n->newspeak == NULL && n->oldspeak != NULL){
+    } else if(n->newspeak == NULL && n->oldspeak != NULL){
         printf("%s\n", n->oldspeak);
     }
 }

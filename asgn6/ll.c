@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include "node.h"
 #include "ll.h"
@@ -27,7 +28,7 @@ LinkedList *ll_create(bool mtf){
 }
 
 void ll_delete(LinkedList **ll){
-    struct Node *index = (*ll)->head;
+    Node *index = (*ll)->head;
     while(index != (*ll)->tail){
         node_delete(&index);
         index = index->next;
@@ -40,7 +41,7 @@ void ll_delete(LinkedList **ll){
 
 uint32_t ll_length(LinkedList *ll){
     uint32_t len = 0;
-    struct Node *index = ll->head->next;
+    Node *index = ll->head->next;
     while(index != ll->tail){
         len++;
         index = index->next;
@@ -61,41 +62,41 @@ void mtf(LinkedList *ll, Node *index){  // move-to-front operation
 }
 
 Node *ll_lookup(LinkedList *ll, char *oldspeak){
-    struct Node *index = ll->head->next;
-    while(index->oldspeak != oldspeak){
-        if(index == ll->tail){
-            return NULL;
+    Node *index = ll->head->next;
+    //printf("indside ll lookup\n");
+    while(index != ll->tail){
+        //printf("inside while ");
+        if (strcmp(oldspeak, index->oldspeak) == 0) {
+            if(ll->mtf){
+                mtf(ll, index);
+            }
+            return index;
         }
-        index = index->next;
+        else{
+            index = index->next;
+        }
     }
-    if(ll->mtf){
-        mtf(ll, index);
-    }
-    return index;
+    return NULL;
 }
 
 
 void ll_insert(LinkedList *ll, char *oldspeak, char *newspeak){
-    struct Node *n = ll_lookup(ll, oldspeak);
-    if( !n ){
-        n = node_create(oldspeak, newspeak);
+    //struct Node *n = ll_lookup(ll, oldspeak);
+    //if( !n ){
+        Node *n = node_create(oldspeak, newspeak);
         n->prev = ll->head;
         n->next = ll->head->next;
         ll->head->next->prev = n;
         ll->head->next = n;
-    } 
-    //node_print(n->next);
+    //}
 }
 
 void ll_print(LinkedList *ll){
-    struct Node *index = ll->head->next;
+    Node *index = ll->head->next;
     uint32_t len = ll_length(ll);
     printf("has length of %d\n", len);
     for (uint32_t i = 0; i < len; i++){
         node_print(index);
         index = index->next;
     }
-        //index = NULL;
-        //free(index);
 }
-

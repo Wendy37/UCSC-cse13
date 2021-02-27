@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "hash.h"
 #include "ll.h"
 #include "speck.h"
@@ -46,8 +47,8 @@ uint32_t ht_size(HashTable *ht){
 
 Node *ht_lookup(HashTable *ht, char *oldspeak){
     uint32_t index = hash(ht->salt, oldspeak) % ht_size(ht);
-    struct Node *n = ll_lookup(ht->lists[index], oldspeak);
-    //node_print(n);
+    char *oldcopy = strdup(oldspeak);
+    Node *n = ll_lookup(ht->lists[index], oldcopy);
     return n;
 }
 
@@ -69,8 +70,4 @@ void ht_print(HashTable *ht){
             ll_print(ht->lists[i]);
         }
     }
-}
-
-void get_ll(HashTable *ht, uint32_t index){  // print a specific ll
-    ll_print(ht->lists[index]);
 }
