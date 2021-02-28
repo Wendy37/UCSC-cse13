@@ -21,8 +21,8 @@ Node *node_create(char *oldspeak, char *newspeak){
 }
 
 void node_delete(Node **n){
-    free((*n)->next);
-    free((*n)->prev);
+    free((*n)->oldspeak);
+    free((*n)->newspeak);
     free(*n);
     *n = NULL;
 }

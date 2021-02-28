@@ -43,7 +43,7 @@ int main(int argc, char **argv){
     
     FILE *infile_bad = fopen("badspeak.txt", "r");
     while( !feof(infile_bad)){
-        char *badspeak = (char *)malloc(1024);
+        char *badspeak = (char *)malloc(1024*sizeof(badspeak));
         fscanf(infile_bad, "%s\n", badspeak);
         bf_insert(bf, badspeak);
         ht_insert(ht, badspeak, NULL);
@@ -51,8 +51,8 @@ int main(int argc, char **argv){
     
     FILE *infile_new = fopen("newspeak.txt", "r");
     while( !feof(infile_new)){
-        char *oldspeak = (char *)malloc(1024);
-        char *newspeak = (char *)malloc(1024);
+        char *oldspeak = (char *)malloc(1024*sizeof(*oldspeak));
+        char *newspeak = (char *)malloc(1024*sizeof(*newspeak));
         fscanf(infile_new, "%s %s\n", oldspeak, newspeak);
         bf_insert(bf, oldspeak);
         ht_insert(ht, oldspeak, newspeak);
@@ -70,13 +70,11 @@ int main(int argc, char **argv){
     }
     char *word = NULL;
     
-    
     while ((word = next_word(stdin, &re)) != NULL){
         if(bf_probe(bf, word)){
             Node *n = ht_lookup(ht, word);
             if(n != NULL){
                 if(n->newspeak == NULL){
-                    
                     thoughtcrime[crimeindex] = n->oldspeak;
                     crimeindex ++;
                 }
@@ -89,7 +87,6 @@ int main(int argc, char **argv){
             }
         }
     }
-    
     if(crimeindex != 0){
         printf("Dear Comrade,\n\n");
         printf("You have chosen to use degenerate words that may cause hurt feelings or cause your comrades to think unpleasant thoughts. This is doubleplus bad. To correct your wrongthink and preserve community consensus we will be sending you to joycamp administered by Medellin’s Miniluv. Beware of the hippos.\n\n");

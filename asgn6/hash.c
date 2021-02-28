@@ -32,9 +32,7 @@ HashTable *ht_create(uint32_t size, bool mtf) {
 
 void ht_delete(HashTable **ht){
     for(uint32_t i = 0; i < (*ht)->size; i++){
-        for(uint32_t j = 0; j < ll_length((*ht)->lists[i]); j++){
-            ll_delete(&((*ht)->lists[i]));
-        }
+        ll_delete(&((*ht)->lists[i]));
     }
     free((*ht)->lists);
     free(*ht);
