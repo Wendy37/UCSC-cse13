@@ -14,14 +14,13 @@
 #define OPTIONS "h:f:m"
 #define WORD "([a-zA-Z0-9])+(('|-|_)[a-zA-Z0-9]+)*"
 
-// test!!!!!
 int main(int argc, char **argv){
     uint32_t ht_size = 10000;
-    uint32_t bf_size = 2 ^ (20);
+    uint32_t bf_size = 1 << 21;
     bool mtf = false;
     char temp[1024];
     int opt = 0;
-    while((opt = getopt(argc, argv, OPTIONS)) != -1){
+    while( (opt = getopt(argc, argv, OPTIONS)) != -1 ){
         switch (opt){
             case 'h':
                 strcpy(temp, optarg);
@@ -59,13 +58,6 @@ int main(int argc, char **argv){
         ht_insert(ht, oldspeak, newspeak);
     }
     
-    /*Node *n = ht_lookup(ht, "for");
-    printf("outoutout\n");
-    node_print(n);
-    
-    fclose(infile_bad);
-    fclose(infile_new);*/
-    
     char *thoughtcrime[15000];
     char *correction[600];
     uint64_t crimeindex = 0;
@@ -77,36 +69,26 @@ int main(int argc, char **argv){
         return 1;
     }
     char *word = NULL;
+    
+    
     while ((word = next_word(stdin, &re)) != NULL){
-        printf("1\n");
         if(bf_probe(bf, word)){
-            printf("2\n");
             Node *n = ht_lookup(ht, word);
-            node_print(n);
-            if(ht_lookup(ht, word) != NULL){
-                printf("3\n");
-                Node *n = ht_lookup(ht, word);
+            if(n != NULL){
                 if(n->newspeak == NULL){
-                    printf("4\n");
+                    
                     thoughtcrime[crimeindex] = n->oldspeak;
                     crimeindex ++;
                 }
                 else{
-                    printf("5\n");
                     correction[corrindex] = n->oldspeak;
-                    printf("6\n");
                     corrindex ++;
                     correction[corrindex] = n->newspeak;
                     corrindex ++;
                 }
             }
         }
-        printf("Word: %s\n", word);
     }
-    fclose(stdin);
-    clear_words();
-    regfree(&re);
-    
     
     if(crimeindex != 0){
         printf("Dear Comrade,\n\n");
@@ -126,13 +108,14 @@ int main(int argc, char **argv){
     else if(corrindex != 0){
         printf("Dear Comrade,\n\n");
         printf("Submitting your text helps to preserve feelings and prevent badthink. Some of the words that you used are not goodspeak. The list shows how to turn the oldspeak words into newspeak.\n\n");
-        for(uint64_t i = 0; i < corrindex + 1; i += 2){
+        for(uint64_t i = 0; i < corrindex; i += 2){
             printf("%s -> %s\n", correction[i], correction[i+1]);
         }
     }
     
-    
-
-    
+    clear_words();
+    regfree(&re);
+    bf_delete(&bf);
+    ht_delete(&ht);
     return 0;
 }

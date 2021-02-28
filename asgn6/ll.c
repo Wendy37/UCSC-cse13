@@ -47,7 +47,7 @@ uint32_t ll_length(LinkedList *ll){
         index = index->next;
     }
     index=NULL;
-    free(index);
+    //free(index);
     ll->length = len;
     return ll->length;
 }
@@ -62,10 +62,11 @@ void mtf(LinkedList *ll, Node *index){  // move-to-front operation
 }
 
 Node *ll_lookup(LinkedList *ll, char *oldspeak){
+    if(!ll){
+        return NULL;
+    }
     Node *index = ll->head->next;
-    //printf("indside ll lookup\n");
     while(index != ll->tail){
-        //printf("inside while ");
         if (strcmp(oldspeak, index->oldspeak) == 0) {
             if(ll->mtf){
                 mtf(ll, index);
@@ -81,22 +82,22 @@ Node *ll_lookup(LinkedList *ll, char *oldspeak){
 
 
 void ll_insert(LinkedList *ll, char *oldspeak, char *newspeak){
-    //struct Node *n = ll_lookup(ll, oldspeak);
-    //if( !n ){
+    Node *n = ll_lookup(ll, oldspeak);
+    if( !n ){
         Node *n = node_create(oldspeak, newspeak);
         n->prev = ll->head;
         n->next = ll->head->next;
         ll->head->next->prev = n;
         ll->head->next = n;
-    //}
+    }
 }
 
 void ll_print(LinkedList *ll){
     Node *index = ll->head->next;
     uint32_t len = ll_length(ll);
-    printf("has length of %d\n", len);
     for (uint32_t i = 0; i < len; i++){
         node_print(index);
         index = index->next;
     }
 }
+
