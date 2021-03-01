@@ -14,3 +14,8 @@ This program implements Bloom Filter and Hash Table to store and search words fr
     
 ## Cleaning
     $ rm -f banhammer *.o
+
+## Options
+    -h: hash table size. The default size is 10000.
+    -f: bloom filter size. The default size is 2^(20).
+    -m: set move-to-front on hash table.
