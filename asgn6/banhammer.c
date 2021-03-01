@@ -55,7 +55,9 @@ int main(int argc, char **argv) {
         bf_insert(bf, oldspeak);
         ht_insert(ht, oldspeak, newspeak);
     }
-
+    
+    fclose(infile_bad);
+    fclose(infile_new);
     char *thoughtcrime[15000];
     char *correction[600];
     uint64_t crimeindex = 0;
