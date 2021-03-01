@@ -42,9 +42,9 @@ uint32_t bf_length(BloomFilter *bf){
 }
 
 void bf_insert(BloomFilter *bf, char *oldspeak){
-    uint32_t index1 = (hash(bf->primary, oldspeak) % bf_length(bf)) + 1;
-    uint32_t index2 = (hash(bf->secondary, oldspeak) % bf_length(bf)) + 1;
-    uint32_t index3 = (hash(bf->tertiary, oldspeak) % bf_length(bf)) + 1;
+    uint32_t index1 = hash(bf->primary, oldspeak) % bf_length(bf);
+    uint32_t index2 = hash(bf->secondary, oldspeak) % bf_length(bf);
+    uint32_t index3 = hash(bf->tertiary, oldspeak) % bf_length(bf);
 
     bv_set_bit(bf->filter, index1);
     bv_set_bit(bf->filter, index2);
