@@ -49,6 +49,8 @@ Node *ht_lookup(HashTable *ht, char *oldspeak) {
     uint32_t index = hash(ht->salt, oldspeak) % ht_size(ht);
     char *oldcopy = strdup(oldspeak);
     Node *n = ll_lookup(ht->lists[index], oldcopy);
+    free(oldcopy);
+    oldcopy = NULL;
     return n;
 }
 

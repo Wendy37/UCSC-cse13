@@ -37,6 +37,7 @@ void ll_delete(LinkedList **ll) {
             (*ll)->head = index;
         }
         free(index);
+        index = NULL;
         free(*ll);
         *ll = NULL;
     } else {
@@ -51,8 +52,8 @@ uint32_t ll_length(LinkedList *ll) {
         len++;
         index = index->next;
     }
-    index = NULL;
     free(index);
+    index = NULL;
     ll->length = len;
     return ll->length;
 }
@@ -85,8 +86,7 @@ Node *ll_lookup(LinkedList *ll, char *oldspeak) {
 }
 
 void ll_insert(LinkedList *ll, char *oldspeak, char *newspeak) {
-    Node *n = ll_lookup(ll, oldspeak);
-    if (!n) {
+    if (!ll_lookup(ll, oldspeak)) {
         Node *n = node_create(oldspeak, newspeak);
         n->prev = ll->head;
         n->next = ll->head->next;
@@ -102,4 +102,6 @@ void ll_print(LinkedList *ll) {
         node_print(index);
         index = index->next;
     }
+    free(index);
+    index = NULL;
 }
