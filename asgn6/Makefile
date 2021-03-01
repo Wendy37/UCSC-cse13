@@ -32,3 +32,6 @@ speck.o: speck.c
 
 clean:
 	rm -f banhammer *.o
+	
+format:
+	clang-format -i --style=file *.[ch]

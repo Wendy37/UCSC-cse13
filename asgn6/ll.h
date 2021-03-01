@@ -2,6 +2,7 @@
 #define __LINKEDLIST_H__
 
 #include "node.h"
+
 #include <stdbool.h>
 #include <stdint.h>
 

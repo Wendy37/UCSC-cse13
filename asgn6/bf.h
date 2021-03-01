@@ -2,8 +2,9 @@
 #define __BF_H__
 
 #include "bv.h"
-#include <stdint.h>
+
 #include <stdbool.h>
+#include <stdint.h>
 
 typedef struct BloomFilter BloomFilter;
 

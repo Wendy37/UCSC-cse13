@@ -2,6 +2,7 @@
 #define __HASH_H__
 
 #include "ll.h"
+
 #include <stdbool.h>
 #include <stdint.h>
 
