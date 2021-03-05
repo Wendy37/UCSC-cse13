@@ -59,6 +59,8 @@ int main(int argc, char **argv) {
     fclose(infile_new);
     fclose(infile_bad);
 
+    fclose(infile_bad);
+    fclose(infile_new);
     char *thoughtcrime[15000];
     char *correction[600];
     uint64_t crimeindex = 0;
