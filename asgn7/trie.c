@@ -4,7 +4,7 @@
 
 TrieNode *trie_node_create(uint16_t code){
     TrieNode *n = (TrieNode *)calloc(1, sizeof(TrieNode));
-    for(int i = 0; i < 256; i++){
+    for(int i = 0; i < ALPHABET; i++){
         n->children[i] = NULL;
     }
     n->code = code;
@@ -12,10 +12,6 @@ TrieNode *trie_node_create(uint16_t code){
 }
 
 void trie_node_delete(TrieNode *n){
-    for(int i = 0; i < 256; i++){
-        free(n->children[i]);
-    }
-    free(n->children);
     free(n);
 }
 
@@ -28,5 +24,26 @@ TrieNode *trie_create(void){
 }
 
 void trie_reset(TrieNode *root){
-    
+    for(int i = 0; i < ALPHABET; i++){
+        trie_delete(root->children[i]);
+        root->children[i] = NULL;
+    }
 }
+
+void trie_delete(TrieNode *n){
+    if(n != NULL){
+        for(int i = 0; i < ALPHABET; i++){
+            trie_delete(n->children[i]);
+            n->children[i] = NULL;
+        }
+    }
+    trie_node_delete(n);
+}
+
+TrieNode *trie_step(TrieNode *n, uint8_t sym){
+    if(n->children[sym] != NULL){
+        return n->children[sym];
+    }
+    return NULL;
+}
+
