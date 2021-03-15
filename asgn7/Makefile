@@ -1,6 +1,8 @@
 CC = clang
 CFLAGS = -Wall -Wextra -Werror -Wpedantic
 
+all: encode decode
+
 encode: encode.o io.o trie.o
 	$(CC) -o encode encode.o io.o trie.o -lm
 	
@@ -25,3 +27,5 @@ word.o: word.c
 clean:
 	rm -f encode decode *.o
 
+format:
+	clang-format -i --style=file *.[ch]

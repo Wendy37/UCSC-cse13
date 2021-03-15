@@ -6,28 +6,29 @@
 #include "endian.h"
 #include "word.h"
 
-static uint8_t bitbuf[BLOCK];
-static uint8_t symbuf[BLOCK];
-static uint16_t bitindex = 0;  // index for buffer
-static uint16_t symindex = 0;  // index for buffer
+static uint8_t bitbuf[BLOCK] = {0};
+static uint8_t symbuf[BLOCK] = {0};
+static int bitindex = 0;  // index for buffer
+static int symindex = 0;  // index for buffer
+
 
 bool getbit_buf(uint8_t *bitbuf, int bitindex){
     uint8_t byte = bitbuf[bitindex / 8];
-    return byte & (1 << bitindex % 8);
+    return (byte & (1 << bitindex % 8)) >> (bitindex % 8);
 }
 
-void setbit_buf(uint8_t *bitbuf, uint8_t bitindex){
+void setbit_buf(uint8_t *bitbuf, int bitindex){
     uint8_t byte = bitbuf[bitindex / 8];
     bitbuf[bitindex / 8] = byte | (1 << bitindex % 8);
 }
 
-void clrbit_buf(uint8_t *bitbuf, uint8_t bitindex){
+void clrbit_buf(uint8_t *bitbuf, int bitindex){
     uint8_t byte = bitbuf[bitindex / 8];
     bitbuf[bitindex / 8] = byte & ~(1 << bitindex % 8);
 }
 
 bool getbit(uint16_t x, int i){
-    return x & (1 << i);
+    return (x & (1 << i)) >> i;
 }
 
 void setbit_16(uint16_t *x, int i){
@@ -85,20 +86,16 @@ void write_header(int outfile, FileHeader *header){
     write_bytes(outfile, (uint8_t*)header, sizeof(FileHeader));
 }
 
-
-//static uint8_t symbols[BLOCK];
-//static int readindex = 0;
-static int end_of_sym = BLOCK;
+static int end_of_sym = -1;
 
 bool read_sym(int infile, uint8_t *sym){
-    int read = 0;
     if(symindex==0){
-        read = read_bytes(infile, symbuf, BLOCK);
+        int read = read_bytes(infile, symbuf, BLOCK);
         if(read == 0){
             return false;
         }
         if(read < BLOCK){
-            end_of_sym = read;
+            end_of_sym = read + 1;
         }
     }
     *sym = symbuf[symindex];
@@ -113,6 +110,9 @@ bool read_sym(int infile, uint8_t *sym){
 }
 
 void write_pair(int outfile, uint16_t code, uint8_t sym, int bitlen){
+    if(big_endian()){
+        code = swap16(code);
+    }
     for(int i = 0; i < bitlen; i++){ // copy codes to buffer
         if(getbit(code, i) == 1){
             setbit_buf(bitbuf, bitindex);
@@ -139,22 +139,24 @@ void write_pair(int outfile, uint16_t code, uint8_t sym, int bitlen){
     }
 }
 
-uint32_t byte(uint32_t bits) {
+int byte(uint32_t bits) {
   return bits % 8 == 0 ? bits / 8 : (bits / 8) + 1;
 }
 
 void flush_pairs(int outfile){
     if(bitindex > 0){
         write_bytes(outfile, bitbuf, byte(bitindex));
-        bitindex = 0;
     }
+    bitindex = 0;
 }
 
 bool read_pair(int infile, uint16_t *code, uint8_t *sym, int bitlen){
     uint16_t temp_code = 0;
+    uint8_t temp_sym = 0;
+    int read=0;
     for(int i = 0; i < bitlen; i++){
         if (bitindex == 0){
-            read_bytes(infile, bitbuf, BLOCK);
+            read = read_bytes(infile, bitbuf, BLOCK);
         }
         if(getbit_buf(bitbuf, bitindex) == 1){
             setbit_16(&temp_code, i);
@@ -166,10 +168,10 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, int bitlen){
             bitindex = 0;
         }
     }
-    uint8_t temp_sym = 0;
+    
     for(int i = 0; i < 8; i++){
         if (bitindex == 0){
-            read_bytes(infile, bitbuf, BLOCK);
+            read = read_bytes(infile, bitbuf, BLOCK);
         }
         if(getbit_buf(bitbuf, bitindex) == 1){
             setbit_8(&temp_sym, i);
@@ -180,6 +182,9 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, int bitlen){
         if(bitindex == BLOCK*8){//hit end of the buffer
             bitindex = 0;
         }
+    }
+    if(big_endian()){
+        temp_code = swap16(temp_code);
     }
     *code = temp_code;
     *sym = temp_sym;
@@ -202,5 +207,6 @@ void write_word(int outfile, Word *w){
 void flush_words(int outfile){
     if(symindex > 0){
         write_bytes(outfile, symbuf, symindex);
+        symindex = 0;
     }
 }

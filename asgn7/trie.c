@@ -34,7 +34,6 @@ void trie_delete(TrieNode *n){
     if(n != NULL){
         for(int i = 0; i < ALPHABET; i++){
             trie_delete(n->children[i]);
-            n->children[i] = NULL;
         }
     }
     trie_node_delete(n);

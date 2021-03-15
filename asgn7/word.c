@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "word.h"
+#include "code.h"
 
 Word *word_create(uint8_t *syms, uint32_t len){
     Word *w = (Word *)calloc(1, sizeof(Word));
@@ -17,7 +18,13 @@ Word *word_create(uint8_t *syms, uint32_t len){
 }
 
 Word *word_append_sym(Word *w, uint8_t sym){
-    Word *new = word_create(w->syms, w->len + 1);
+    Word *new = word_create(w->syms, w->len);
+    if(new->syms == NULL){
+        new->syms = calloc(w->len+1, sizeof(uint8_t));
+    } else{
+        new->syms = realloc(new->syms, (w->len+1)*sizeof(uint8_t));
+    }
+    new->len = w->len+1;
     new->syms[w->len] = sym;
     return new;
 }
@@ -30,19 +37,21 @@ void word_delete(Word *w){
 }
 
 WordTable *wt_create(void){
-    Word **wt = (Word **)calloc((UINT16_MAX - 1), sizeof(Word *));
-    wt[1] = word_create(0, 0);
+    WordTable *wt = (WordTable *)calloc((MAX_CODE), sizeof(Word *));
+    wt[1] = word_create(NULL, 0);
     return wt;
 }
 
 void wt_reset(WordTable *wt){
-    for(uint16_t i = 0; i < UINT16_MAX - 1; i++){
+    for(uint16_t i = 0; i < MAX_CODE; i++){
+        free(wt[i]->syms);
+        wt[i]->syms = NULL;
         wt[i] = NULL;
     }
 }
 
 void wt_delete(WordTable *wt){
-    for(uint16_t i = 0; i < UINT16_MAX - 1; i++){
+    for(uint16_t i = 0; i < MAX_CODE; i++){
         word_delete(wt[i]);
         free(wt[i]);
         wt[i] = NULL;

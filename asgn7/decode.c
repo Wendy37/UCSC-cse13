@@ -1,40 +1,63 @@
+#include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <sys/fcntl.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #include <math.h>
 #include "word.h"
 #include "io.h"
 #include "code.h"
-#include "decode.h"
 
 int bitlen(uint16_t code){
     return log2(code) + 1;
 }
 
-int main(void){
-    printf("1   ");
-    int infile = open("test.txt", O_RDONLY);
-    int outfile = open("test2.txt", O_WRONLY);
-    FileHeader *header = NULL;
-    read_header(infile, header);
-    printf("1   ");
+#define OPTIONS "vi:o:"
+
+int main(int argc, char **argv){
+    int opt = 0;
+    int infile = STDIN_FILENO;
+    int outfile = STDOUT_FILENO;
+    struct stat statbuf;
+    fstat(outfile, &statbuf);
+    while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
+        switch (opt) {
+            case'v':
+                break;
+            case'i':
+                if (optarg != NULL) {
+                  infile = open(optarg, O_RDONLY);
+                }
+                break;
+            case'o':
+                if (optarg != NULL) {
+                  outfile = open(optarg, O_WRONLY|O_CREAT|O_TRUNC, 0600);
+                }
+                break;
+        }
+    }
+    if(outfile == -1){
+        fprintf(stderr, "Failed to open outfile\n");
+    }
+    FileHeader header;
+    read_header(infile, &header);
+    if(header.magic != MAGIC){
+        exit(1);
+    }
+    fchmod(outfile, header.protection);
     WordTable *wt = wt_create();
-    printf("2   ");
     uint8_t curr_sym = 0;
     uint16_t curr_code = 0;
     uint16_t next_code = START_CODE;
     while(read_pair(infile, &curr_code, &curr_sym, bitlen(next_code))){
-        printf("3   ");
         wt[next_code] = word_append_sym(wt[curr_code], curr_sym);
         write_word(outfile, wt[next_code]);
         next_code++;
-        printf("4   ");
         if(next_code == MAX_CODE){
             wt_reset(wt);
             next_code = START_CODE;
         }
-        printf("5   ");
     }
     flush_words(outfile);
     close(infile);

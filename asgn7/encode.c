@@ -1,22 +1,48 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/fcntl.h>
+#include <sys/stat.h>
 #include <math.h>
 #include "io.h"
 #include "trie.h"
 #include "code.h"
-#include "encode.h"
 
 int bitlen(uint16_t code){
     return log2(code) + 1;
 }
 
-int main(void) {
-    int infile = open("corpora/artificial/alphabet.txt", O_RDONLY);
-    int outfile = open("test.txt", O_WRONLY);
-    /*FileHeader *header = NULL;
-    header->magic = MAGIC;
-    write_header(outfile, header);*/
+#define OPTIONS "vi:o:"
+
+int main(int argc, char **argv) {
+    int opt = 0;
+    int infile = STDIN_FILENO;
+    int outfile = STDOUT_FILENO;
+    struct stat statbuf;
+    fstat(outfile, &statbuf);
+    while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
+        switch (opt) {
+            case'v':
+                break;
+            case'i':
+                if (optarg != NULL) {
+                  infile = open(optarg, O_RDONLY);
+                }
+                break;
+            case'o':
+                if (optarg != NULL) {
+                  outfile = open(optarg, O_WRONLY|O_CREAT|O_TRUNC, 0600);
+                }
+                break;
+        }
+    }
+    if(outfile == -1){
+        fprintf(stderr, "Failed to open outfile\n");
+    }
+    FileHeader header;
+    header.magic = MAGIC;
+    header.protection = statbuf.st_mode;
+    fchmod(outfile, header.protection);
+    write_header(outfile, &header);
     TrieNode *root = trie_create();
     TrieNode *curr_node = root;
     TrieNode *prev_node = NULL;
