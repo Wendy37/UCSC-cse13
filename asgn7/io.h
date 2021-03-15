@@ -2,8 +2,9 @@
 #define __IO_H__
 
 #include "word.h"
-#include <stdint.h>
+
 #include <stdbool.h>
+#include <stdint.h>
 
 #define BLOCK 4096 // 4KB blocks.
 #define MAGIC 0xBAADBAAC // Unique encoder/decoder magic number.
